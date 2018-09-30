@@ -1,0 +1,65 @@
+<project name="JavaESAPI" default="all" basedir="..">
+
+	<description>
+		JavaESAPI
+    </description>
+
+	<property file="${basedir}\build\build.properties" />
+
+	<property name="src" location="${basedir}\src" />
+	<property name="lib" value="${basedir}\lib" />
+	<property name="build" location="${basedir}\build" />
+
+	<property name="dist" location="${build}\dist" />
+	<property name="classes" value="${build}\classes" />
+
+
+	<target name="all" depends="clean,prepare,compile,dist" />
+
+	<target name="clean">
+		<delete dir="${dist}" />
+		<delete dir="${classes}" />
+	</target>
+
+	<target name="prepare" depends="clean">
+		<mkdir dir="${classes}" />
+		<mkdir dir="${dist}" />
+	</target>
+
+
+	<target name="compile" depends="prepare">
+		<javac srcdir="${src}" destdir="${classes}" source="1.7" target="1.7" includeantruntime="false" debug="true" debuglevel="lines,source" encoding="cp1252">
+
+			<classpath>
+				<pathelement path="${classes}" />
+				<fileset dir="${lib}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+
+	<target name="dist" depends="compile" description="generate the distribution">
+
+		<copy todir="${classes}" overwrite="false">
+			<fileset dir="${src}" includes="*.properties" />
+			<fileset dir="${src}" includes="**/*.xml" />
+		</copy>
+
+		<jar jarfile="${dist}\${ant.project.name}.jar">
+
+			<manifest>
+				<attribute name="Built-By" value="SreenuBilla" />
+			</manifest>
+
+			<fileset dir="${classes}">
+				<include name="org\**" />
+			</fileset>
+
+		</jar>
+
+
+	</target>
+
+</project>
